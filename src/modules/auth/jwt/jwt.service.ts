@@ -34,8 +34,8 @@ export class JwtService {
     });
     await this.jwtRepository.save({
       user: { id: userId },
-      session_id: sessionId,
-      refresh_token: refreshToken,
+      sessionId: sessionId,
+      refreshToken: refreshToken,
     });
     return { accessToken, refreshToken };
   }
