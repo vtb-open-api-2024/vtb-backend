@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { JwtModule } from './jwt/jwt.module';
-import { AuthorizationModule } from './authorization/authentication.module';
+import { JwtModule } from './services/jwt/jwt.module';
+import { AuthorizationModule } from './presentation/authorization/authentication.module';
 
 @Module({
   imports: [

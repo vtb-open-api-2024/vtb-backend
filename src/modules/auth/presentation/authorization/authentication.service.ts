@@ -2,13 +2,13 @@ import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from 'src/schema/users/user.entity';
-import { JwtService } from '../jwt/jwt.service';
 import { SendDtoReq, SendDtoRes } from './dto/send.dto';
 import { ConfirmDtoReq, ConfirmDtoRes } from './dto/confirm.dto';
-import { UcallerService } from '../ucaller/ucaller.service';
 import { createCipheriv, createDecipheriv, randomBytes } from 'crypto';
-import { AuthCode } from 'src/schema/auth-code/auth-code.entity';
+import { AuthCode } from 'src/schema/auth_code/auth-code.entity';
 import { CONFIG_CIPHER } from 'src/config/config.export';
+import { UcallerService } from '../../services/ucaller/ucaller.service';
+import { JwtService } from '../../services/jwt/jwt.service';
 
 
 @Injectable()

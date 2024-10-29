@@ -1,6 +1,6 @@
 import { Global, Module } from '@nestjs/common';
 import { JwtService } from './jwt.service';
-import { JwtTokensDBModule } from 'src/schema/jwt-tokens/jwt.tokens.module';
+import { JwtTokensDBModule } from 'src/schema/jwt_tokens/jwt.tokens.module';
 
 @Global()
 @Module({

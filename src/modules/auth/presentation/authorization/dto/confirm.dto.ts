@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { JwtPair } from '../../jwt/interface/jwt.interface';
 import { IsString } from 'class-validator';
+import { JwtPair } from 'src/modules/auth/services/jwt/interface/jwt.interface';
 
 export class ConfirmDtoReq {
 

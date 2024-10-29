@@ -7,9 +7,9 @@ export class BaseEntity {
   @Column({ type: 'varchar', default: '1' })
   public version: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'created_at' })
   public createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: 'updated_at' })
   public updatedAt: Date;
 }
