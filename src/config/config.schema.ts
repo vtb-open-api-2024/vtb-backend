@@ -45,3 +45,29 @@ export class ConfigDB {
   @IsNotEmpty()
   DB_NAME: string
 }
+
+export class ConfigAuth {
+  @IsString()
+  @IsNotEmpty()
+  JWT_ACCESS: string;
+
+  @IsString()
+  @IsNotEmpty()
+  JWT_REFRESH: string;
+
+  @IsString()
+  @IsNotEmpty()
+  JWT_RECOVERY: string;
+
+  @IsString()
+  @IsNotEmpty()
+  JWT_ACCESS_EXP: string;
+
+  @IsString()
+  @IsNotEmpty()
+  JWT_REFRESH_EXP: string;
+
+  @IsString()
+  @IsNotEmpty()
+  JWT_RECOVERY_EXP: string;
+}
