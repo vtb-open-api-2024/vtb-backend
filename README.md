@@ -59,6 +59,17 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+## Docker build
+
+```bash
+# build 
+$ docker build -t vtb-backend .
+
+# run
+$ docker run --env-file .env -d -p 3000:3000 vtb-backend
+
+```
+
 ## Resources
 
 Check out a few resources that may come in handy when working with NestJS:

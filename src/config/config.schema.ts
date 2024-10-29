@@ -22,3 +22,26 @@ export class ConfigApp {
   @IsNotEmpty()
   ADDRESS: string;
 }
+
+export class ConfigDB {
+  
+  @IsString()
+  @IsNotEmpty()
+  DB_USER: string;
+
+  @IsString()
+  @IsNotEmpty()
+  DB_HOST: string;
+  
+  @IsNumber()
+  @IsNotEmpty()
+  DB_PORT: number;
+  
+  @IsString()
+  @IsNotEmpty()
+  DB_PASSWORD: string;
+
+  @IsString()
+  @IsNotEmpty()
+  DB_NAME: string
+}
