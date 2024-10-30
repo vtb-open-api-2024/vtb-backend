@@ -86,12 +86,23 @@ export class ConfigUcaller {
   @IsString()
   @IsNotEmpty()
   UCALLER_INIT_CALL_URL: string;
-  
+
   @IsString()
   @IsNotEmpty()
   UCALLER_SECRET_KEY: string;
-  
+
   @IsString()
   @IsNotEmpty()
   UCALLER_SERVICE_ID: string;
+}
+
+
+export class ConfigEtherium {
+  @IsString()
+  @IsNotEmpty()
+  ETHERSCAN_API_KEY: string;
+
+  @IsString()
+  @IsNotEmpty()
+  ETHERSCAN_BASE_URL: string;
 }

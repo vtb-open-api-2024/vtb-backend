@@ -1,40 +1,30 @@
-import { Body, Controller, Delete, Get, Inject, Patch, Post, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Post, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiBearerAuth, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { CreatePortfolioDtoReq } from './dto/create.dto';
 import { BaseGuard } from 'src/guards/base.guard';
 import { CONFIG_AUTH } from 'src/config/config.export';
 import { Jwt } from '../auth/services/jwt/jwt.decorator';
 import { JwtAuthPayload } from '../auth/services/jwt/interface/jwt.interface';
-import { PortfolioService } from './portfolio.service';
+import { WalletService } from './wallet.service';
+import { CreateWalletDtoReq } from './dto/create.dto';
 
-@Controller('portfolio')
-@ApiTags('Portfolio')
+@Controller('crypto-wallet')
+@ApiTags('Crypto Wallet')
 @ApiBearerAuth()
 @UseGuards(new BaseGuard(CONFIG_AUTH.JWT_ACCESS))
-export class PortfolioController {
+export class WalletController {
 
   @Inject()
-  private readonly portfolioService: PortfolioService;
+  private readonly walletService: WalletService;
 
   @Post('create')
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file'))
   public async create(
     @Jwt() jwt: JwtAuthPayload,
-    @Body() dto: CreatePortfolioDtoReq
+    @Body() dto: CreateWalletDtoReq
   ) {
-    return this.portfolioService.create(jwt, dto);
-  }
-
-  @Patch('patch')
-  public async patch(@Body() dto: CreatePortfolioDtoReq) {
-    
-  }
-
-  @Delete('delete')
-  public async delete(@Body() dto: CreatePortfolioDtoReq) {
-    
+    return this.walletService.create(jwt, dto);
   }
 
   @Get()

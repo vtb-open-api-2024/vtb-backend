@@ -11,6 +11,7 @@ import { UcallerService } from '../../services/ucaller/ucaller.service';
 import { JwtService } from '../../services/jwt/jwt.service';
 import { JwtAuthPayload } from '../../services/jwt/interface/jwt.interface';
 import { RefreshDtoRes } from './dto/refresh.dto';
+import { encrypt } from 'src/modules/utilities/utilities.cipher';
 
 
 @Injectable()
@@ -30,7 +31,7 @@ export class AuthorizationService {
 
   public async sendCode(dto: SendDtoReq): Promise<SendDtoRes> {
     const phone = dto.phone.replace(/\D/g, '');
-    const encryptedPhone = this.encrypt(phone);
+    const encryptedPhone = encrypt(phone);
 
     let user = await this.userRep.findOne({
       relationLoadStrategy: 'join',
@@ -57,6 +58,9 @@ export class AuthorizationService {
     return {
       statusCode: 201
     }
+  }
+  encrypt(secrectCode: string): any {
+    throw new Error('Method not implemented.');
   }
 
   public async confirmCode(dto: ConfirmDtoReq): Promise<ConfirmDtoRes> {
@@ -85,23 +89,5 @@ export class AuthorizationService {
       return min + (randomBytes(1).readUInt8(0) % max - min + 1)
     })
     return code.join('');
-  }
-
-  private encrypt(str: string) {
-    const key = Buffer.from(CONFIG_CIPHER.AES_CIPHER_KEY, "hex");
-    const iv = Buffer.from(CONFIG_CIPHER.AES_CIPHER_IV, "hex");
-    const cipher = createCipheriv('aes-256-cbc', key, iv);
-    let encrypted = cipher.update(str, 'utf8', 'hex');
-    encrypted += cipher.final('hex');
-    return encrypted;
-  }
-
-  private decrypt(str: string) {
-    const key = Buffer.from(CONFIG_CIPHER.AES_CIPHER_KEY, "hex")
-    const iv = Buffer.from(CONFIG_CIPHER.AES_CIPHER_IV, "hex")
-    const decipher = createDecipheriv('aes-256-cbc', key, iv);
-    let decrypted = decipher.update(str, 'hex', 'utf8');
-    decrypted += decipher.final('utf8');
-    return decrypted;
   }
 }

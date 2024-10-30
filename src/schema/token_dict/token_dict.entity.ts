@@ -10,6 +10,6 @@ export class TokenDict extends BaseEntity {
   @JoinColumn({ name: 'blockchain_dict_id' })
   blockchainDictId: BlockchainDict;
 
-  @Column()
+  @Column({ unique: true })
   title: string;
 }

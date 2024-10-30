@@ -20,6 +20,12 @@ export class CryptoWallet extends BaseEntity {
   @Column()
   address: string;
 
+  @Column({ name: 'private_key' })
+  privateKey: string;
+
+  @Column()
+  iv: string;
+
   @Column({ type: 'money' })
   balance: string;
 }
