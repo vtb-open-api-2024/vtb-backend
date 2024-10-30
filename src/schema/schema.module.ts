@@ -8,6 +8,8 @@ import { FiatPortfolioDBModule } from './fiat_portfolios/fiat-portfolios.module'
 
 @Module({
   imports: [
+    CryptoPortfolioDBModule,
+    FiatPortfolioDBModule,
     FiatPortfolioDBModule,
     CryptoPortfolioDBModule,
     JwtTokensDBModule,

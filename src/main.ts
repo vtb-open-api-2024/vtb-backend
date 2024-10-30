@@ -9,11 +9,10 @@ import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    httpsOptions: {
-      key: readFileSync(join('ssl/certificate.key')).toString(),
-      cert: readFileSync(join('ssl/fullchain.crt')).toString(),
-      //ca: readFileSync(join('ssl/certificate_ca.crt')).toString(),
-    },
+    // httpsOptions: {
+    //   key: readFileSync(join('ssl/certificate.key')).toString(),
+    //   cert: readFileSync(join('ssl/fullchain.crt')).toString()
+    // },
   });
   app.useGlobalPipes(
     new ValidationPipe({
@@ -24,6 +23,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('VTB hackaton api')
     .addServer(CONFIG_APP.ADDRESS)
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

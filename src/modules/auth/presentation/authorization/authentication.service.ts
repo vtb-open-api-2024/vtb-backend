@@ -9,6 +9,8 @@ import { AuthCode } from 'src/schema/auth_code/auth-code.entity';
 import { CONFIG_CIPHER } from 'src/config/config.export';
 import { UcallerService } from '../../services/ucaller/ucaller.service';
 import { JwtService } from '../../services/jwt/jwt.service';
+import { JwtAuthPayload } from '../../services/jwt/interface/jwt.interface';
+import { RefreshDtoRes } from './dto/refresh.dto';
 
 
 @Injectable()
@@ -71,6 +73,10 @@ export class AuthorizationService {
     await this.authCodeRep.delete(code.id);
     await this.userRep.save(code.user);
     return this.jwtService.createJwtTokens(code.user.id);
+  }
+
+  public async refresh(jwt: JwtAuthPayload): Promise<RefreshDtoRes> {
+    return this.jwtService.updateJwtTokens(jwt.userId, jwt.sessionId);
   }
 
   private getCryptoCode(codeSize: number): string {

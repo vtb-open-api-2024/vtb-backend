@@ -24,5 +24,5 @@ export class User extends BaseEntity {
   cryptoPortfolio: CryptoPortfolio[];
 
   @OneToMany(() => FiatPortfolio, (fiatPortfolio) => fiatPortfolio.user)
-  fiatPortfolio: FiatPortfolio[]
+  fiatPortfolio: FiatPortfolio[];
 }
