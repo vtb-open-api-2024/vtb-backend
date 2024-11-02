@@ -4,7 +4,7 @@ import { JwtToken } from '../jwt_tokens/jwt.token.entity';
 import { AuthCode } from '../auth_code/auth-code.entity';
 import { CryptoPortfolio } from '../crypto_portfolios/crypto-portfolio.entity';
 import { CryptoWallet } from '../crypto_wallets/crypto_wallets.entity';
-import { Cards } from '../cards/cards.entity';
+import { Card } from '../cards/cards.entity';
 
 @Entity({ name: 'users' })
 export class User extends BaseEntity {
@@ -27,6 +27,6 @@ export class User extends BaseEntity {
   @OneToMany(() => CryptoPortfolio, (cryptoPortfolio) => cryptoPortfolio.user)
   cryptoPortfolio: CryptoPortfolio[];
 
-  @OneToMany(() => Cards, (card) => card.user)
-  cards: Cards[];
+  @OneToMany(() => Card, (card) => card.user)
+  cards: Card[];
 }

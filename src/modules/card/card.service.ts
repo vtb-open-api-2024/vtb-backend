@@ -2,7 +2,7 @@ import { BadRequestException, ConflictException, Injectable } from '@nestjs/comm
 import { AuthPayload } from '../auth/services/jwt/interface/jwt.interface';
 import { CreateAttachCardRequestDtoReq, CreateAttachCardRequestDtoRes } from './dto/attach_card.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Cards } from 'src/schema/cards/cards.entity';
+import { Card } from 'src/schema/cards/cards.entity';
 import { Repository } from 'typeorm';
 import { CardApiPayload } from './interface/card_api.interface';
 import { FakeCardsRegister } from 'src/schema/fake_cards_register/fake_cards_register.entity';
@@ -12,8 +12,8 @@ import { GetCardsRequestDtoReq, GetCardsRequestDtoRes } from './dto/get_cards.dt
 @Injectable()
 export class CardService {
 
-  @InjectRepository(Cards)
-  private readonly cardsRep: Repository<Cards>;
+  @InjectRepository(Card)
+  private readonly cardsRep: Repository<Card>;
 
   @InjectRepository(FakeCardsRegister)
   private readonly fakeCardsRegisterRep: Repository<FakeCardsRegister>;

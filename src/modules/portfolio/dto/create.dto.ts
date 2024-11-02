@@ -1,12 +1,24 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsNumber } from 'class-validator';
 
 
-export class CreatePaymentRequestDtoReq {
+export class CreatePaymentCryptoDtoReq {
 
-  @ApiProperty({ description: 'Portfolio title' })
-  @IsString()
-  public title: string;
+  @ApiProperty()
+  @Type(() => Number)
+  @IsNumber()
+  creditCardId: number
+
+  @ApiProperty()
+  @Type(() => Number)
+  @IsNumber()
+  cryptoWalletId: number;
+
+  @ApiProperty()
+  @Type(() => Number)
+  @IsNumber()
+  amount: number;
 }
 
 

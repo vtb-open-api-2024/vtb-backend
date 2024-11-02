@@ -34,6 +34,7 @@
     "bitcore-lib": "^10.5.3",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
+    "dinero.js": "^2.0.0-alpha.14",
     "ethers": "^6.13.4",
     "pg": "^8.13.1",
     "reflect-metadata": "^0.2.0",

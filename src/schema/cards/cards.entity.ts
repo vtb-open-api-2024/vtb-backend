@@ -3,7 +3,7 @@ import { BaseEntity } from '../base/base.entity';
 import { User } from '../users/user.entity';
 
 @Entity({ name: 'cards' })
-export class Cards extends BaseEntity {
+export class Card extends BaseEntity {
 
   @Index()
   @ManyToOne(() => User)
