@@ -39,7 +39,8 @@ export class CardService {
       firstName: cardInfo.firstName,
       secondName: cardInfo.secondName,
       exp: cardInfo.exp,
-      balance: cardInfo.balance
+      balance: cardInfo.balance,
+      cvc: cardInfo.cvc,
     });
     return {
       id: card.id,
@@ -59,7 +60,7 @@ export class CardService {
         user: { id: user.userId },
       }
     });
-    if (cards) {
+    if (!cards) {
       throw new BadRequestException();
     }
     return {
@@ -88,7 +89,8 @@ export class CardService {
       firstName: card.firstName,
       secondName: card.secondName,
       exp: card.exp,
-      balance: card.balance
+      balance: card.balance,
+      cvc: card.cvc
     }
   }
 }

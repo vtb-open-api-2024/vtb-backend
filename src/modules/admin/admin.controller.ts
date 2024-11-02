@@ -1,11 +1,10 @@
-import { Body, Controller, Delete, Get, Inject, Patch, Post, Put, UseGuards, UseInterceptors } from '@nestjs/common';
-import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Inject, Put, UseGuards, UseInterceptors } from '@nestjs/common';
+import { ApiBearerAuth, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { BaseGuard } from 'src/guards/base.guard';
 import { CONFIG_AUTH } from 'src/config/config.export';
-import { User } from '../auth/services/jwt/jwt.decorator';
-import { AuthPayload } from '../auth/services/jwt/interface/jwt.interface';
-import { CreatePaymentRequestDtoReq } from '../portfolio/dto/create.dto';
+import { CreateFakeCardDtoReq } from './dto/create_card.dto';
+import { AdminService } from './admin.service';
 
 
 @Controller('admin')
@@ -14,14 +13,13 @@ import { CreatePaymentRequestDtoReq } from '../portfolio/dto/create.dto';
 @UseGuards(new BaseGuard(CONFIG_AUTH.JWT_ACCESS))
 export class AdminController {
 
+  @Inject()
+  private readonly adminService: AdminService;
+
   @Put('fake-card')
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file'))
-  public async createFakeCard(
-    @User() user: AuthPayload,
-    @Body() dto: CreatePaymentRequestDtoReq
-  ) {
-    
+  public async createFakeCard(@Body() dto: CreateFakeCardDtoReq) {
+    return this.adminService.createFakeCard(dto);
   } 
-
 }

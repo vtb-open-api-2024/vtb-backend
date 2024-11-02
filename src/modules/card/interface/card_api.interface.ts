@@ -4,4 +4,5 @@ export interface CardApiPayload {
   secondName: string;
   exp: Date;
   balance: string;
+  cvc: number;
 }
