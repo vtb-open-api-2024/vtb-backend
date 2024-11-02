@@ -1,14 +1,16 @@
 import { BadRequestException, ConflictException, Inject, Injectable } from '@nestjs/common';
-import { JwtAuthPayload } from '../auth/services/jwt/interface/jwt.interface';
+import { AuthPayload } from '../auth/services/jwt/interface/jwt.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
-import { CreateWalletDtoReq } from './dto/create.dto';
+import { CreateWalletDtoReq, CreateWalletDtoRes } from './dto/create.dto';
 import { CryptoWallet } from 'src/schema/crypto_wallets/crypto_wallets.entity';
 import { AggregatorService } from '../blockchain/aggregator/aggregator.service';
 import { TokenDict } from 'src/schema/token_dict/token_dict.entity';
 import { randomBytes } from 'crypto';
 import { CryptoPortfolio } from 'src/schema/crypto_portfolios/crypto-portfolio.entity';
 import { encrypt } from '../utilities/utilities.cipher';
+import { GetWalletsDtoReq, GetWalletsDtoRes } from './dto/get.dto';
+import { WalletItem } from './dto/wallet.dto';
 
 
 @Injectable()
@@ -26,7 +28,10 @@ export class WalletService {
   @Inject()
   private readonly aggregatorService: AggregatorService;
 
-  public async create(jwt: JwtAuthPayload, dto: CreateWalletDtoReq) { 
+  public async createWallet(
+    user: AuthPayload,
+    dto: CreateWalletDtoReq
+  ): Promise<CreateWalletDtoRes> {
     const token = await this.tokenDictRep.findOne({
       relationLoadStrategy: 'join',
       relations: { blockchainDictId: true },
@@ -37,35 +42,65 @@ export class WalletService {
     }
     const portfolio = await this.cryptoPortfolioRep.findOne({
       relationLoadStrategy: 'join',
-      relations: { cryptoWallets: true },
-      where: { 
-        user: { id: jwt.userId },
+      relations: { cryptoWallets: { tokenDict: true } },
+      where: {
+        user: { id: user.userId },
         id: dto.portfolioId,
-        cryptoWallets: {
-          tokenDict: {
-            id: In([dto.tokenId])
-          }
-        }
       },
     });
     if (!portfolio) {
       throw new BadRequestException();
     }
-    if (portfolio.cryptoWallets.length) {
+    const wallet = portfolio.cryptoWallets
+      .find((wallet) => wallet.tokenDict.id === token.id);
+
+    if (wallet) {
       throw new ConflictException();
     }
-    const cryptoWallet = this.aggregatorService.createWallet(
-      token.blockchainDictId.title
-    );
+    const cryptoWallet = await this.aggregatorService
+      .createWallet(token.blockchainDictId.title);
+     
     const iv = randomBytes(16).toString('hex');
     const encryptPrivateKey = encrypt(cryptoWallet.privateKey, iv);
 
-    const wallet = await this.cryptoWalletRep.save({
+    await this.cryptoWalletRep.save({
       address: cryptoWallet.address,
-      portfolio: portfolio,
+      user: { id: user.userId },
+      tokenDict: { id: token.id },
+      cryptoPortfolio: { id: portfolio.id },
       privateKey: encryptPrivateKey,
       iv: iv,
+      balance: '0'
     });
-    return { statusCode: 201 };
+    return {
+      address: cryptoWallet.address,
+      portfolioId: portfolio.id,
+      tokenId: token.id,
+      balance: '0'
+    } as CreateWalletDtoRes;
+  }
+
+  public async getWallets(
+    user: AuthPayload,
+    dto: GetWalletsDtoReq
+  ): Promise<GetWalletsDtoRes> {
+    const wallets = await this.cryptoWalletRep.find({
+      relationLoadStrategy: 'join',
+      relations: { tokenDict: true },
+      where: {
+        user: { id: user.userId },
+        cryptoPortfolio: { id: dto.portfolioId }
+      }
+    });
+    return {
+      wallets: wallets.map(wallet => {
+        return {
+          address: wallet.address,
+          portfolioId: dto.portfolioId,
+          tokenId: wallet.tokenDict.id,
+          balance: wallet.balance
+        } as WalletItem
+      })
+    }
   }
 }

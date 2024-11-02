@@ -3,7 +3,7 @@ import { Repository } from 'typeorm';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtPayload, sign, verify } from 'jsonwebtoken';
 import { JwtToken } from 'src/schema/jwt_tokens/jwt.token.entity';
-import { JwtAuthPayload, JwtPair } from './interface/jwt.interface';
+import { AuthPayload, JwtPair } from './interface/jwt.interface';
 import { CONFIG_AUTH } from 'src/config/config.export';
 import { randomUUID } from 'crypto';
 
@@ -75,7 +75,7 @@ export class JwtService {
     }
   }
 
-  private generateAuthTokens(payload: JwtAuthPayload): JwtPair {
+  private generateAuthTokens(payload: AuthPayload): JwtPair {
     return {
       accessToken: sign(payload, CONFIG_AUTH.JWT_ACCESS, {
         expiresIn: CONFIG_AUTH.JWT_ACCESS_EXP

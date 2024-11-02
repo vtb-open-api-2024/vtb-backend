@@ -2,6 +2,7 @@ import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseEntity } from '../base/base.entity';
 import { CryptoPortfolio } from '../crypto_portfolios/crypto-portfolio.entity';
 import { TokenDict } from '../token_dict/token_dict.entity';
+import { User } from '../users/user.entity';
 
 @Entity({ name: 'crypto_wallets' })
 export class CryptoWallet extends BaseEntity {
@@ -15,6 +16,11 @@ export class CryptoWallet extends BaseEntity {
   @ManyToOne(() => TokenDict)
   @JoinColumn({ name: 'token_dict_id' })
   tokenDict: TokenDict;
+
+  @Index()
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 
   @Index()
   @Column()

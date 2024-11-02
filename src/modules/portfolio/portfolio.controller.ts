@@ -1,12 +1,24 @@
-import { Body, Controller, Delete, Get, Inject, Patch, Post, UseGuards, UseInterceptors } from '@nestjs/common';
-import { ApiBearerAuth, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { 
+  Body, 
+  Controller, 
+  Delete, 
+  Get, 
+  Inject, 
+  Patch, 
+  Post, 
+  Query, 
+  UseGuards, 
+  UseInterceptors 
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { CreatePortfolioDtoReq } from './dto/create.dto';
 import { BaseGuard } from 'src/guards/base.guard';
 import { CONFIG_AUTH } from 'src/config/config.export';
-import { Jwt } from '../auth/services/jwt/jwt.decorator';
-import { JwtAuthPayload } from '../auth/services/jwt/interface/jwt.interface';
+import { User } from '../auth/services/jwt/jwt.decorator';
+import { AuthPayload } from '../auth/services/jwt/interface/jwt.interface';
 import { PortfolioService } from './portfolio.service';
+import { GetPortfolioDtoReq } from './dto/get.dto';
+import { CreatePortfolioDtoReq } from '../payment/dto/create_payment.dto';
 
 @Controller('portfolio')
 @ApiTags('Portfolio')
@@ -17,28 +29,33 @@ export class PortfolioController {
   @Inject()
   private readonly portfolioService: PortfolioService;
 
-  @Post('create')
+  @Post()
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file'))
   public async create(
-    @Jwt() jwt: JwtAuthPayload,
+    @User() user: AuthPayload,
     @Body() dto: CreatePortfolioDtoReq
   ) {
-    return this.portfolioService.create(jwt, dto);
+    return this.portfolioService.create(user, dto);
   }
 
-  @Patch('patch')
+  @Patch()
+  @ApiOperation({ summary: 'NOT READY' })
   public async patch(@Body() dto: CreatePortfolioDtoReq) {
     
   }
 
-  @Delete('delete')
+  @Delete()
+  @ApiOperation({ summary: 'NOT READY' })
   public async delete(@Body() dto: CreatePortfolioDtoReq) {
     
   }
 
   @Get()
-  public async get() {
-    
+  public async get(
+    @User() user: AuthPayload,
+    @Query() dto: GetPortfolioDtoReq
+  ) {
+    return this.portfolioService.getPortfolio(user, dto);
   }
 }

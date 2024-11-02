@@ -1,4 +1,4 @@
-export interface JwtAuthPayload {
+export interface AuthPayload {
   userId: number;
   sessionId: string;
 }

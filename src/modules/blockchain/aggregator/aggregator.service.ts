@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { EthereumProviderService } from '../ethereum/ethereum.provider.service';
 import { ModuleRef } from '@nestjs/core';
 import { 
   IBlockchainProvider, 
   IBlockchainWallet, 
   ITransaction
 } from '../interface/blcokchain.wallet.interface';
+import { EthereumProviderService } from '../providers/ethereum/ethereum.provider.service';
 
 @Injectable()
 export class AggregatorService {
@@ -20,7 +20,7 @@ export class AggregatorService {
     ]);
   }
 
-  public createWallet(blcokchain: string): IBlockchainWallet {
+  public async createWallet(blcokchain: string): Promise<IBlockchainWallet> {
     return this.getProvider(blcokchain).createWallet();
   }
 
@@ -29,7 +29,7 @@ export class AggregatorService {
   }
 
   private getProvider(blcokchain: string) {
-    if (this.blockchainDict.has(blcokchain)) {
+    if (!this.blockchainDict.has(blcokchain)) {
       throw new Error(`it doesn't exists`);
     }
     return this.blockchainDict.get(blcokchain);

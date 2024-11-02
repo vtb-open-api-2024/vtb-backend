@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { IsNumber } from 'class-validator';
+import { WalletItem } from './wallet.dto';
 
 
 export class CreateWalletDtoReq {
@@ -17,6 +18,9 @@ export class CreateWalletDtoReq {
 }
 
 
-export class CreatePrtfolioRes {
-
+export class CreateWalletDtoRes implements WalletItem {
+  public address: string;
+  public portfolioId: number;
+  public tokenId: number;
+  public balance: string;
 }

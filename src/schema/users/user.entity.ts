@@ -3,7 +3,8 @@ import { BaseEntity } from '../base/base.entity';
 import { JwtToken } from '../jwt_tokens/jwt.token.entity';
 import { AuthCode } from '../auth_code/auth-code.entity';
 import { CryptoPortfolio } from '../crypto_portfolios/crypto-portfolio.entity';
-import { FiatPortfolio } from '../fiat_portfolios/fiat-portfolios.entity';
+import { CryptoWallet } from '../crypto_wallets/crypto_wallets.entity';
+import { Cards } from '../cards/cards.entity';
 
 @Entity({ name: 'users' })
 export class User extends BaseEntity {
@@ -19,10 +20,13 @@ export class User extends BaseEntity {
 
   @OneToOne(() => AuthCode, (authCode) => authCode.user)
   authCode: AuthCode
+  
+  @OneToMany(() => CryptoWallet, (cryptoWallet) => cryptoWallet.user)
+  cryptoWallets: CryptoWallet[];
 
   @OneToMany(() => CryptoPortfolio, (cryptoPortfolio) => cryptoPortfolio.user)
   cryptoPortfolio: CryptoPortfolio[];
 
-  @OneToMany(() => FiatPortfolio, (fiatPortfolio) => fiatPortfolio.user)
-  fiatPortfolio: FiatPortfolio[];
+  @OneToMany(() => Cards, (card) => card.user)
+  cards: Cards[];
 }

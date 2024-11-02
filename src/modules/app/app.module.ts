@@ -4,16 +4,20 @@ import { AuthModule } from '../auth/auth.module';
 import { PortfolioModule } from '../portfolio/portfolio.module';
 import { WalletModule } from '../wallet/wallet.module';
 import { ReferenceModule } from '../reference/reference.module';
-import { BlcokchainModule } from '../blockchain/blockchain.module';
+import { CardModule } from '../card/card.module';
+import { PaymentModule } from '../payment/payment.module';
+import { AdminModule } from '../admin/admin.module';
 
 @Module({
   imports: [
     SchemaModule,
-    BlcokchainModule,
     AuthModule,
     PortfolioModule,
     WalletModule,
-    ReferenceModule
+    CardModule,
+    PaymentModule,
+    ReferenceModule,
+    AdminModule,
   ],
 })
 export class AppModule {}

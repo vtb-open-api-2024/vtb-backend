@@ -9,7 +9,7 @@ import { AuthCode } from 'src/schema/auth_code/auth-code.entity';
 import { CONFIG_CIPHER } from 'src/config/config.export';
 import { UcallerService } from '../../services/ucaller/ucaller.service';
 import { JwtService } from '../../services/jwt/jwt.service';
-import { JwtAuthPayload } from '../../services/jwt/interface/jwt.interface';
+import { AuthPayload } from '../../services/jwt/interface/jwt.interface';
 import { RefreshDtoRes } from './dto/refresh.dto';
 import { encrypt } from 'src/modules/utilities/utilities.cipher';
 
@@ -79,7 +79,7 @@ export class AuthorizationService {
     return this.jwtService.createJwtTokens(code.user.id);
   }
 
-  public async refresh(jwt: JwtAuthPayload): Promise<RefreshDtoRes> {
+  public async refresh(jwt: AuthPayload): Promise<RefreshDtoRes> {
     return this.jwtService.updateJwtTokens(jwt.userId, jwt.sessionId);
   }
 

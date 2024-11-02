@@ -6,8 +6,8 @@ import { SendDtoReq, SendDtoRes } from './dto/send.dto';
 import { ConfirmDtoReq, ConfirmDtoRes } from './dto/confirm.dto';
 import { BaseGuard } from 'src/guards/base.guard';
 import { CONFIG_AUTH } from 'src/config/config.export';
-import { Jwt } from '../../services/jwt/jwt.decorator';
-import { JwtAuthPayload } from '../../services/jwt/interface/jwt.interface';
+import { User } from '../../services/jwt/jwt.decorator';
+import { AuthPayload } from '../../services/jwt/interface/jwt.interface';
 import { RefreshDtoRes } from './dto/refresh.dto';
 
 @Controller('auth')
@@ -34,7 +34,7 @@ export class AuthorizationController {
   @Get('refresh-token')
   @ApiBearerAuth()
   @UseGuards(new BaseGuard(CONFIG_AUTH.JWT_REFRESH))
-  public async refresh(@Jwt() jwt: JwtAuthPayload): Promise<RefreshDtoRes> {
+  public async refresh(@User() jwt: AuthPayload): Promise<RefreshDtoRes> {
     return this.authorizationService.refresh(jwt);
   }
 }

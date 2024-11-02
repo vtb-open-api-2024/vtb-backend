@@ -11,7 +11,7 @@ export interface ITransaction {
 
 export abstract class IBlockchainProvider {
 
-  abstract createWallet(): IBlockchainWallet;
+  abstract createWallet(): IBlockchainWallet | Promise<IBlockchainWallet>;
   abstract signTransaction(transaction: ITransaction): Promise<string>;
   //sendTransaction(): Promise<string>;
 }

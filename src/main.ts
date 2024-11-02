@@ -21,7 +21,7 @@ async function bootstrap() {
     }),
   );
   const config = new DocumentBuilder()
-    .setTitle('VTB hackaton api')
+    .setTitle('CRYPTORUB API')
     .addServer(CONFIG_APP.ADDRESS)
     .addBearerAuth()
     .build();

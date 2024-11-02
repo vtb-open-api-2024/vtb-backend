@@ -1,11 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { Wallet } from 'ethers';
-import { IBlockchainProvider, IBlockchainWallet, ITransaction } from '../interface/blcokchain.wallet.interface';
+import { 
+  IBlockchainProvider, 
+  IBlockchainWallet, 
+  ITransaction 
+} from '../../interface/blcokchain.wallet.interface';
+
 
 @Injectable()
 export class EthereumProviderService extends IBlockchainProvider {
 
-  signTransaction(transaction: ITransaction): Promise<string> {
+  public signTransaction(transaction: ITransaction): Promise<string> {
     throw new Error('Method not implemented.');
   }
 
