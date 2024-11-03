@@ -4,14 +4,13 @@ import { Repository } from 'typeorm';
 import { User } from 'src/schema/users/user.entity';
 import { SendDtoReq, SendDtoRes } from './dto/send.dto';
 import { ConfirmDtoReq, ConfirmDtoRes } from './dto/confirm.dto';
-import { createCipheriv, createDecipheriv, randomBytes } from 'crypto';
+import { randomBytes } from 'crypto';
 import { AuthCode } from 'src/schema/auth_code/auth-code.entity';
-import { CONFIG_CIPHER } from 'src/config/config.export';
-import { UcallerService } from '../../services/ucaller/ucaller.service';
-import { JwtService } from '../../services/jwt/jwt.service';
-import { AuthPayload } from '../../services/jwt/interface/jwt.interface';
 import { RefreshDtoRes } from './dto/refresh.dto';
 import { encrypt } from 'src/modules/utilities/utilities.cipher';
+import { JwtService } from '../services/jwt/jwt.service';
+import { UcallerService } from '../services/ucaller/ucaller.service';
+import { AuthPayload } from '../services/jwt/interface/jwt.interface';
 
 
 @Injectable()
@@ -50,11 +49,11 @@ export class AuthorizationService {
       code: this.encrypt(secrectCode),
       user: { id: user.id }
     });
-    // await this.ucallerService.initCall({
-    //   phone: Number(phone),
-    //   code: Number(secrectCode),
-    //   client: 'test'
-    // });
+    await this.ucallerService.initCall({
+      phone: Number(phone),
+      code: Number(secrectCode),
+      client: 'test'
+    });
     return {
       statusCode: 201
     }

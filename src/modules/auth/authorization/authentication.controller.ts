@@ -6,9 +6,9 @@ import { SendDtoReq, SendDtoRes } from './dto/send.dto';
 import { ConfirmDtoReq, ConfirmDtoRes } from './dto/confirm.dto';
 import { BaseGuard } from 'src/guards/base.guard';
 import { CONFIG_AUTH } from 'src/config/config.export';
-import { User } from '../../services/jwt/jwt.decorator';
-import { AuthPayload } from '../../services/jwt/interface/jwt.interface';
 import { RefreshDtoRes } from './dto/refresh.dto';
+import { AuthPayload } from '../services/jwt/interface/jwt.interface';
+import { User } from '../services/jwt/jwt.decorator';
 
 @Controller('auth')
 @ApiTags('Auth')
