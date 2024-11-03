@@ -9,10 +9,10 @@ import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    // httpsOptions: {
-    //   key: readFileSync(join('ssl/certificate.key')).toString(),
-    //   cert: readFileSync(join('ssl/fullchain.crt')).toString()
-    // },
+    httpsOptions: {
+      key: readFileSync(join('ssl/certificate.key')).toString(),
+      cert: readFileSync(join('ssl/fullchain.crt')).toString()
+    },
   });
   app.useGlobalPipes(
     new ValidationPipe({
