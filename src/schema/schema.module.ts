@@ -7,9 +7,11 @@ import { CryptoPortfolioDBModule } from './crypto_portfolios/crypto-portfolio.mo
 import { CryptoWalletDBModule } from './crypto_wallets/crypto_wallets.module';
 import { CardsDBModule } from './cards/cards.module';
 import { FakeCardsRegisterDBModule } from './fake_cards_register/fake_cards_register.module';
+import { PaymentDBModule } from './payments/payments.module';
 
 @Module({
   imports: [
+    PaymentDBModule,
     FakeCardsRegisterDBModule,
     CryptoPortfolioDBModule,
     CardsDBModule,

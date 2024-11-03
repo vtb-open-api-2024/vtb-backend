@@ -106,3 +106,9 @@ export class ConfigEtherium {
   @IsNotEmpty()
   ETHERSCAN_BASE_URL: string;
 }
+
+export class ConfigOpenExchangeRates {
+  @IsString()
+  @IsNotEmpty()
+  OPEN_EXCHANGE_RATES_KEY: string;
+}

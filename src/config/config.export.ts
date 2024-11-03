@@ -3,6 +3,7 @@ import {
   ConfigAuth, 
   ConfigCipher, 
   ConfigDB, 
+  ConfigOpenExchangeRates, 
   ConfigUcaller
 } from "./config.schema";
 
@@ -17,3 +18,5 @@ export const CONFIG_AUTH = validateEnv(ConfigAuth);
 export const CONFIG_CIPHER = validateEnv(ConfigCipher);
 
 export const CONFIG_UCALLER = validateEnv(ConfigUcaller);
+
+export const CONFIG_OPEN_EXCHANGE_RATES = validateEnv(ConfigOpenExchangeRates);

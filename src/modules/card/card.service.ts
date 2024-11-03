@@ -66,6 +66,7 @@ export class CardService {
     return {
       cards: cards.map(card => {
         return {
+          cardId: card.id,
           curdNum: card.cardNum,
           firstName: card.firstName,
           secondName: card.secondName,
@@ -85,6 +86,7 @@ export class CardService {
       throw new BadRequestException();
     }
     return {
+      cardId: card.id,
       curdNum: card.cardNum,
       firstName: card.firstName,
       secondName: card.secondName,

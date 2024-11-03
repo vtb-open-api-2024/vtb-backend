@@ -51,6 +51,7 @@ export class PortfolioService {
         portfolioId: portfolio.id,
         wallets: portfolio.cryptoWallets.map(wallet => {
           return {
+            walletId: wallet.id,
             address: wallet.address,
             tokenId: wallet.tokenDict.id,
             balance: wallet.balance

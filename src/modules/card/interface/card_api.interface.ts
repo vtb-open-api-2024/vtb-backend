@@ -1,4 +1,5 @@
 export interface CardApiPayload {
+  cardId: number;
   curdNum: string;
   firstName: string;
   secondName: string;
