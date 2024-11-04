@@ -46,7 +46,7 @@ export class AuthorizationService {
     });
     const secrectCode = this.getCryptoCode(4);
     await this.authCodeRep.save({
-      code: this.encrypt(secrectCode),
+      code: encrypt(secrectCode),
       user: { id: user.id }
     });
     await this.ucallerService.initCall({
@@ -58,12 +58,9 @@ export class AuthorizationService {
       statusCode: 201
     }
   }
-  encrypt(secrectCode: string): any {
-    throw new Error('Method not implemented.');
-  }
 
   public async confirmCode(dto: ConfirmDtoReq): Promise<ConfirmDtoRes> {
-    const encryptedCode = this.encrypt(dto.code);
+    const encryptedCode = encrypt(dto.code);
     const code = await this.authCodeRep.findOne({
       relationLoadStrategy: 'join',
       relations: { user: true },
