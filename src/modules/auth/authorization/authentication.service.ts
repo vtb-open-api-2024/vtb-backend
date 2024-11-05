@@ -1,6 +1,6 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { User } from 'src/schema/users/user.entity';
 import { SendDtoReq, SendDtoRes } from './dto/send.dto';
 import { ConfirmDtoReq, ConfirmDtoRes } from './dto/confirm.dto';
@@ -11,6 +11,7 @@ import { encrypt } from 'src/modules/utilities/utilities.cipher';
 import { JwtService } from '../services/jwt/jwt.service';
 import { UcallerService } from '../services/ucaller/ucaller.service';
 import { AuthPayload } from '../services/jwt/interface/jwt.interface';
+import { Transactional } from 'src/modules/utilities/transactional.decorator';
 
 
 @Injectable()
@@ -28,6 +29,10 @@ export class AuthorizationService {
   @Inject()
   private readonly ucallerService: UcallerService
 
+  @Inject()
+  private readonly dataSource: DataSource;
+
+  @Transactional()
   public async sendCode(dto: SendDtoReq): Promise<SendDtoRes> {
     const phone = dto.phone.replace(/\D/g, '');
     const encryptedPhone = encrypt(phone);
@@ -59,6 +64,7 @@ export class AuthorizationService {
     }
   }
 
+  @Transactional()
   public async confirmCode(dto: ConfirmDtoReq): Promise<ConfirmDtoRes> {
     const encryptedCode = encrypt(dto.code);
     const code = await this.authCodeRep.findOne({

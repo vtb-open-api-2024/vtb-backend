@@ -12,6 +12,7 @@ import { Payment } from 'src/schema/payments/payments.entity';
 import { CONFIG_OPEN_EXCHANGE_RATES } from 'src/config/config.export';
 import { get } from 'axios';
 import { ExchangeRatesResponse } from './interface/exchange_rates.interface';
+import { Transactional } from '../utilities/transactional.decorator';
 
 
 @Injectable()
@@ -32,92 +33,77 @@ export class PaymentService {
   @Inject()
   private readonly dataSource: DataSource;
 
+  @Transactional('REPEATABLE READ')
   public async createPaymentCrypto(
     user: AuthPayload,
     dto: CreatePaymentCryptoDtoReq
   ) {
-    const queryRunner = this.dataSource.createQueryRunner();
-    await queryRunner.connect();
-    await queryRunner.startTransaction('REPEATABLE READ');
 
-    const userRep = queryRunner.manager.getRepository(User);
-    const paymentRep = queryRunner.manager.getRepository(Payment);
-    const cardsRep = queryRunner.manager.getRepository(Card);
-    const cryptoWalletRep = queryRunner.manager.getRepository(CryptoWallet);
-
-    try {
-      const userRecord = await userRep.findOne({
-        relationLoadStrategy: 'join',
-        relations: {
-          cards: true,
-          cryptoWallets: {
-            tokenDict: true
-          },
+    const userRecord = await this.userRep.findOne({
+      relationLoadStrategy: 'join',
+      relations: {
+        cards: true,
+        cryptoWallets: {
+          tokenDict: true
         },
-        where: {
-          id: user.userId,
-          cards: { id: dto.creditCardId },
-          cryptoWallets: { id: dto.cryptoWalletId }
-        }
-      });
-      if (!userRecord || !userRecord.cards.length || !userRecord.cryptoWallets.length) {
-        throw new BadRequestException();
+      },
+      where: {
+        id: user.userId,
+        cards: { id: dto.creditCardId },
+        cryptoWallets: { id: dto.cryptoWalletId }
       }
-      const card = userRecord.cards[0];
-      const cryptoWallet = userRecord.cryptoWallets[0];
+    });
+    if (!userRecord || !userRecord.cards.length || !userRecord.cryptoWallets.length) {
+      throw new BadRequestException();
+    }
+    const card = userRecord.cards[0];
+    const cryptoWallet = userRecord.cryptoWallets[0];
 
 
-      const balance = dinero({
-        amount: this.parseMoney(card.balance),
-        scale: 2,
-        currency: RUB
-      });
-      const comission = dinero({
-        amount: this.getComission(dto.amount),
-        scale: 2,
-        currency: RUB
-      });
-      const required = dinero({
-        amount: Math.round(dto.amount * 100),
-        scale: 2,
-        currency: RUB,
-      });
-      const finallyRequired = add(comission, required);
+    const balance = dinero({
+      amount: this.parseMoney(card.balance),
+      scale: 2,
+      currency: RUB
+    });
+    const comission = dinero({
+      amount: this.getComission(dto.amount),
+      scale: 2,
+      currency: RUB
+    });
+    const required = dinero({
+      amount: Math.round(dto.amount * 100),
+      scale: 2,
+      currency: RUB,
+    });
+    const finallyRequired = add(comission, required);
 
-      if (!greaterThanOrEqual(balance, finallyRequired)) {
-        throw new BadRequestException();
-      }
+    if (!greaterThanOrEqual(balance, finallyRequired)) {
+      throw new BadRequestException();
+    }
 
-      const currency = 1022;
-      const rates = { USD: { amount: currency, scale: 5 } };
-      const result = convert(required, USD, rates);
+    const currency = 1022;
+    const rates = { USD: { amount: currency, scale: 5 } };
+    const result = convert(required, USD, rates);
 
-      await paymentRep.save({
-        cryptoWallet: { id: cryptoWallet.id },
-        user: { id: user.userId },
-        card: { id: card.id },
-        receivedCrypto: toDecimal(result),
-        commission: toDecimal(comission),
-        amount: toDecimal(required),
-      })
+    await this.paymentRep.save({
+      cryptoWallet: { id: cryptoWallet.id },
+      user: { id: user.userId },
+      card: { id: card.id },
+      receivedCrypto: toDecimal(result),
+      commission: toDecimal(comission),
+      amount: toDecimal(required),
+    })
 
-      await cardsRep.update(card.id, {
-        balance: toDecimal(subtract(balance, finallyRequired))
-      });
+    await this.cardsRep.update(card.id, {
+      balance: toDecimal(subtract(balance, finallyRequired))
+    });
 
-      await cryptoWalletRep.update(cryptoWallet.id, {
-        balance: toDecimal(required)
-      });
+    await this.cryptoWalletRep.update(cryptoWallet.id, {
+      balance: toDecimal(required)
+    });
 
-      await queryRunner.commitTransaction();
-
-      return {
-        statusCode: 201
-      }
-    } catch(err) {
-      await queryRunner.rollbackTransaction();
-    } finally {
-      await queryRunner.release();
+    return {
+      statusCode: 201
     }
   }
 
