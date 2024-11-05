@@ -2,7 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import { IsCreditCard, IsDate, IsNumber, IsString } from "class-validator";
 
-export class CreateFakeCardDtoReq {
+export class PutFakeCardDtoReq {
 
   @ApiProperty()
   @IsCreditCard()
