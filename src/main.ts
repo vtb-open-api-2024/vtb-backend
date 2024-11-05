@@ -9,10 +9,10 @@ import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    httpsOptions: {
-      key: readFileSync(join('ssl/certificate.key')).toString(),
-      cert: readFileSync(join('ssl/fullchain.crt')).toString()
-    },
+    // httpsOptions: {
+    //   key: readFileSync(join('ssl/certificate.key')).toString(),
+    //   cert: readFileSync(join('ssl/fullchain.crt')).toString()
+    // },
   });
   app.useGlobalPipes(
     new ValidationPipe({
@@ -24,6 +24,12 @@ async function bootstrap() {
     .setTitle('CRYPTORUB API')
     .addServer(CONFIG_APP.ADDRESS)
     .addBearerAuth()
+    .addApiKey({ 
+      type: 'apiKey', 
+      name: 'x-admin-key', 
+      in: 'header' 
+    }, 
+    'ADMIN_KEY')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

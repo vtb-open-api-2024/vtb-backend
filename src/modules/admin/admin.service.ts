@@ -10,7 +10,7 @@ export class AdminService {
   @InjectRepository(FakeCardsRegister)
   private readonly fakeCardsRegisterRep: Repository<FakeCardsRegister>;
 
-  public async createFakeCard(dto: CreateFakeCardDtoReq) {
+  public async putFakeCard(dto: CreateFakeCardDtoReq) {
     const card = await this.fakeCardsRegisterRep.findOne({
       where: { cardNum: dto.cardNum }
     });
@@ -18,5 +18,13 @@ export class AdminService {
       return new ConflictException()
     }
     return this.fakeCardsRegisterRep.save({ ...dto });
+  }
+
+  public async putToken() {
+
+  }
+
+  public async putBlockchain() {
+
   }
 }
