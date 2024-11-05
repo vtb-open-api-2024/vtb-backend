@@ -17,10 +17,12 @@ jobs:
       
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME}
-          pwd
-          cd ${HOME_DIR}
-          pwd
-          python3 cicd.py
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} << 'EOF'
+            echo "Success Connection!"
+            pwd
+            cd ${HOME_DIR}
+            pwd
+            python3 cicd.py
+          EOF
           rm -f private_key
           echo "Success Deployed!"
