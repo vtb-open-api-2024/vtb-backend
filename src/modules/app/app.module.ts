@@ -7,6 +7,7 @@ import { ReferenceModule } from '../reference/reference.module';
 import { CardModule } from '../card/card.module';
 import { PaymentModule } from '../payment/payment.module';
 import { AdminModule } from '../admin/admin.module';
+import { TransactionModule } from '../transaction/transaction.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { AdminModule } from '../admin/admin.module';
     WalletModule,
     CardModule,
     PaymentModule,
+    TransactionModule,
     ReferenceModule,
     AdminModule,
   ],
