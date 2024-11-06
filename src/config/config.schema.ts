@@ -70,6 +70,10 @@ export class ConfigAuth {
   @IsString()
   @IsNotEmpty()
   JWT_RECOVERY_EXP: string;
+
+  @IsString()
+  @IsNotEmpty()
+  ADMIN_KEY: string;
 }
 
 export class ConfigCipher {
