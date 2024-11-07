@@ -3,6 +3,7 @@ import { AppModule } from './modules/app/app.module';
 import { CONFIG_APP } from './config/config.export';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
+import { DESCRIPTION } from './modules/app/const/app.description';
 import * as cookieParser from 'cookie-parser';
 
 
@@ -16,7 +17,8 @@ async function bootstrap() {
     }),
   );
   const config = new DocumentBuilder()
-    .setTitle('CRYPTORUB API')
+    .setTitle('Crypto RUB API')
+    .setDescription(DESCRIPTION)
     .addServer(CONFIG_APP.ADDRESS)
     .addBearerAuth()
     .addApiKey({ 
