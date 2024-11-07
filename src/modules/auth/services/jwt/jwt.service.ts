@@ -6,6 +6,7 @@ import { JwtToken } from 'src/schema/jwt_tokens/jwt.token.entity';
 import { AuthPayload, JwtPair } from './interface/jwt.interface';
 import { CONFIG_AUTH } from 'src/config/config.export';
 import { randomUUID } from 'crypto';
+import { hash } from 'bcrypt';
 
 
 @Injectable()
@@ -32,10 +33,11 @@ export class JwtService {
       userId: userId,
       sessionId: sessionId
     });
+    const hashRefreshToken = await hash(refreshToken, 3);
     await this.jwtRepository.save({
       user: { id: userId },
       sessionId: sessionId,
-      refreshToken: refreshToken,
+      refreshToken: hashRefreshToken,
     });
     return { accessToken, refreshToken };
   }
@@ -55,8 +57,9 @@ export class JwtService {
       userId: userId,
       sessionId: sessionId
     });
+    const hashRefreshToken = await hash(refreshToken, 3);
     await this.jwtRepository.update({ id: token.id }, {
-      refreshToken: refreshToken
+      refreshToken: hashRefreshToken
     });
     return { accessToken, refreshToken };
   }
