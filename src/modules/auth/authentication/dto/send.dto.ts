@@ -1,5 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiResponseOptions } from '@nestjs/swagger';
 import { IsPhoneNumber } from 'class-validator';
+import { HttpRes } from 'src/modules/utilities/dto/response.dto';
 
 export class SendDtoReq {
 
@@ -13,4 +14,9 @@ export class SendDtoReq {
 
 export class SendDtoRes {
   statusCode: number
+}
+
+
+export const SEND_DTO_RES: ApiResponseOptions = {
+  type: HttpRes
 }

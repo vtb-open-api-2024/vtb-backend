@@ -12,6 +12,7 @@ import { JwtService } from '../services/jwt/jwt.service';
 import { UcallerService } from '../services/ucaller/ucaller.service';
 import { AuthPayload } from '../services/jwt/interface/jwt.interface';
 import { Transactional } from 'src/modules/utilities/transactional.decorator';
+import { Response } from 'express';
 
 
 @Injectable()
@@ -65,7 +66,7 @@ export class AuthorizationService {
   }
 
   @Transactional()
-  public async confirmCode(dto: ConfirmDtoReq): Promise<ConfirmDtoRes> {
+  public async confirmCode(res: Response, dto: ConfirmDtoReq): Promise<ConfirmDtoRes> {
     const encryptedCode = encrypt(dto.code);
     const code = await this.authCodeRep.findOne({
       relationLoadStrategy: 'join',
@@ -78,7 +79,15 @@ export class AuthorizationService {
     code.user.isActive = true;
     await this.authCodeRep.delete(code.id);
     await this.userRep.save(code.user);
-    return this.jwtService.createJwtTokens(code.user.id);
+    const tokens = await this.jwtService.createJwtTokens(code.user.id);
+
+    res.cookie('refreshToken', tokens.refreshToken, {
+      httpOnly: true,  
+      secure: true,
+      maxAge: 24 * 60 * 60 * 1000,
+      sameSite: 'strict',
+    });
+    return tokens;
   }
 
   public async refresh(jwt: AuthPayload): Promise<RefreshDtoRes> {
