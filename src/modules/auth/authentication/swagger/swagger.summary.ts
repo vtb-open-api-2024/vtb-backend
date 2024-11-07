@@ -1,4 +1,4 @@
-export const SEND_CODE_SUM = 'Запрос 4-х значного ключа на номер телефона';
+export const SEND_CODE_SUM = 'Запрос 4-х значного ключа на номер телефона test';
 
 export const CONFIRM_CODE_SUM = 'Запрос на аутентификацию пользвателя с выдачей JWT токенов';
 
