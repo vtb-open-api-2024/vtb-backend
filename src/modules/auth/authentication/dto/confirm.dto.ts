@@ -9,7 +9,6 @@ export class ConfirmDtoReq {
   public code: string;
 }
 
-export class ConfirmDtoRes implements JwtPair {
+export class ConfirmDtoRes {
   accessToken: string;
-  refreshToken: string;
 }

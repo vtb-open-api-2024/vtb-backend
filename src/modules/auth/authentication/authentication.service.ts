@@ -79,19 +79,28 @@ export class AuthorizationService {
     code.user.isActive = true;
     await this.authCodeRep.delete(code.id);
     await this.userRep.save(code.user);
-    const tokens = await this.jwtService.createJwtTokens(code.user.id);
+    const { accessToken, refreshToken } = await this.jwtService
+      .createJwtTokens(code.user.id);
 
-    res.cookie('refreshToken', tokens.refreshToken, {
-      httpOnly: true,  
+    this.setRefreshToken(res, refreshToken);
+    return { accessToken };
+  }
+
+  public async refresh(res: Response, jwt: AuthPayload): Promise<RefreshDtoRes> {
+    const { accessToken, refreshToken } = await this.jwtService
+      .updateJwtTokens(jwt.userId, jwt.sessionId);
+
+    this.setRefreshToken(res, refreshToken);
+    return { accessToken };
+  }
+
+  private setRefreshToken(res: Response, token: string): void {
+    res.cookie("refreshToken", `Bearer ${token}`, {
+      httpOnly: true,
       secure: true,
       maxAge: 24 * 60 * 60 * 1000,
       sameSite: 'strict',
     });
-    return tokens;
-  }
-
-  public async refresh(jwt: AuthPayload): Promise<RefreshDtoRes> {
-    return this.jwtService.updateJwtTokens(jwt.userId, jwt.sessionId);
   }
 
   private getCryptoCode(codeSize: number): string {

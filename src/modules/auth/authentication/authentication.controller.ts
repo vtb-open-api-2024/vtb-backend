@@ -12,6 +12,7 @@ import { User } from '../services/jwt/jwt.decorator';
 import { CONFIRM_CODE_SUM, REFRESH_SUM, SEND_CODE_SUM } from './swagger/swagger.summary';
 import { ApiErrorResponses } from 'src/swagger/errors-exception.dto';
 import { Response } from 'express';
+import { RefreshGuard } from 'src/guards/refresh.guard';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -44,8 +45,11 @@ export class AuthorizationController {
   @Get('refresh-token')
   @ApiBearerAuth()
   @ApiOperation({ summary: REFRESH_SUM })
-  @UseGuards(new BaseGuard(CONFIG_AUTH.JWT_REFRESH))
-  public async refresh(@User() jwt: AuthPayload): Promise<RefreshDtoRes> {
-    return this.authorizationService.refresh(jwt);
+  @UseGuards(new RefreshGuard(CONFIG_AUTH.JWT_REFRESH))
+  public async refresh(
+    @Res({ passthrough: true }) res: Response,
+    @User() jwt: AuthPayload
+  ): Promise<RefreshDtoRes> {
+    return this.authorizationService.refresh(res, jwt);
   }
 }
