@@ -5,8 +5,8 @@ import { BaseGuard } from 'src/guards/base.guard';
 import { CONFIG_AUTH } from 'src/config/config.export';
 import { User } from '../auth/services/jwt/jwt.decorator';
 import { AuthPayload } from '../auth/services/jwt/interface/jwt.interface';
-import { CreatePaymentCryptoDtoReq } from '../portfolio/dto/create.dto';
 import { PaymentService } from './payment.service';
+import { CreatePaymentCryptoDtoReq } from './dto/create_payment.dto';
 
 
 @Controller('payment')

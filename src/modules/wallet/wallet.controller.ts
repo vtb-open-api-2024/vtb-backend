@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Inject, Post, Query, UseGuards, UseInterceptors } from '@nestjs/common';
-import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiConsumes, ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { BaseGuard } from 'src/guards/base.guard';
 import { CONFIG_AUTH } from 'src/config/config.export';
@@ -8,6 +8,7 @@ import { AuthPayload } from '../auth/services/jwt/interface/jwt.interface';
 import { WalletService } from './wallet.service';
 import { CreateWalletDtoReq, CreateWalletDtoRes } from './dto/create.dto';
 import { GetWalletsDtoReq, GetWalletsDtoRes } from './dto/get.dto';
+import { CREATE_WALLET_SUM } from './swagger/swagger.summary';
 
 @Controller('crypto-wallet')
 @ApiTags('Crypto Wallet')
@@ -21,6 +22,8 @@ export class WalletController {
   @Post('create-wallet')
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file'))
+  @ApiOperation({ summary: CREATE_WALLET_SUM })
+  @ApiCreatedResponse({ type: CreateWalletDtoRes})
   public async createWallet(
     @User() user: AuthPayload,
     @Body() dto: CreateWalletDtoReq

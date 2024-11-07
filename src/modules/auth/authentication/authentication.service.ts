@@ -16,7 +16,7 @@ import { Response } from 'express';
 
 
 @Injectable()
-export class AuthorizationService {
+export class AuthenticationService {
 
   @InjectRepository(User)
   private readonly userRep: Repository<User>;

@@ -6,7 +6,7 @@ import { Repository } from 'typeorm';
 import { GetPortfolioDtoReq, GetPortfolioDtoRes } from './dto/get.dto';
 import { PortfolioItem } from './dto/portfolio.dto';
 import { WalletItem } from '../wallet/dto/wallet.dto';
-import { CreatePortfolioDtoReq } from '../payment/dto/create_payment.dto';
+import { CreatePortfolioDtoReq } from './dto/create.dto';
 
 
 @Injectable()
@@ -15,20 +15,23 @@ export class PortfolioService {
   @InjectRepository(CryptoPortfolio)
   private readonly cryptoPortfolioRep: Repository<CryptoPortfolio>;
 
-
-  public async create(jwt: AuthPayload, dto: CreatePortfolioDtoReq) {
-    const portfolio = await this.cryptoPortfolioRep.findOne({
+  public async create(jwt: AuthPayload, dto: CreatePortfolioDtoReq): Promise<PortfolioItem> {
+    let portfolio = await this.cryptoPortfolioRep.findOne({
       select: { id: true },
       where: { user: { id: jwt.userId }, title: dto.title }
     });
     if (portfolio) {
-      return new ConflictException();
+      throw new ConflictException();
     }
-    await this.cryptoPortfolioRep.save({
+    portfolio = await this.cryptoPortfolioRep.save({
       title: dto.title,
       user: { id: jwt.userId }
     });
-    return { statusCode: 201 };
+    return { 
+      title: portfolio?.title,
+      portfolioId: portfolio?.id,
+      wallets: null
+    } as PortfolioItem;
   }
 
   public async getPortfolio(

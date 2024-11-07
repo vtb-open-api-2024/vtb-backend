@@ -5,7 +5,6 @@ import { BaseGuard } from 'src/guards/base.guard';
 import { CONFIG_AUTH } from 'src/config/config.export';
 import { User } from '../auth/services/jwt/jwt.decorator';
 import { AuthPayload } from '../auth/services/jwt/interface/jwt.interface';
-import { CreatePaymentCryptoDtoReq } from '../portfolio/dto/create.dto';
 import { TransactionService } from './transaction.service';
 
 

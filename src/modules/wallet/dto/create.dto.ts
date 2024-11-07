@@ -18,10 +18,4 @@ export class CreateWalletDtoReq {
 }
 
 
-export class CreateWalletDtoRes implements WalletItem {
-  walletId: number;
-  address: string;
-  portfolioId: number;
-  tokenId: number;
-  balance: string;
-}
+export class CreateWalletDtoRes extends WalletItem {}

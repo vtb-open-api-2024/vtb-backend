@@ -17,6 +17,7 @@ import {
 import { 
   ApiBearerAuth, 
   ApiConsumes, 
+  ApiCreatedResponse, 
   ApiOperation, 
   ApiTags 
 } from '@nestjs/swagger';
@@ -28,6 +29,7 @@ import {
   GetCardsRequestDtoReq, 
   GetCardsRequestDtoRes 
 } from './dto/get_cards.dto';
+import { ATTACH_CARD_SUM } from './swagger/swagger.summary';
 
 
 @Controller('card')
@@ -42,6 +44,8 @@ export class CardController {
   @Post('attach')
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file'))
+  @ApiOperation({ summary: ATTACH_CARD_SUM })
+  @ApiCreatedResponse({ type: CreateAttachCardRequestDtoRes})
   public async createAttachCardRequest(
     @User() user: AuthPayload,
     @Body() dto: CreateAttachCardRequestDtoReq

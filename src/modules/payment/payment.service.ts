@@ -1,6 +1,5 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { AuthPayload } from '../auth/services/jwt/interface/jwt.interface';
-import { CreatePaymentCryptoDtoReq } from '../portfolio/dto/create.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/schema/users/user.entity';
 import { DataSource, Repository } from 'typeorm';
@@ -13,6 +12,7 @@ import { CONFIG_OPEN_EXCHANGE_RATES } from 'src/config/config.export';
 import { get } from 'axios';
 import { ExchangeRatesResponse } from './interface/exchange_rates.interface';
 import { Transactional } from '../utilities/transactional.decorator';
+import { CreatePaymentCryptoDtoReq } from './dto/create_payment.dto';
 
 
 @Injectable()

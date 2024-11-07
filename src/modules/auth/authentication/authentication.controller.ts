@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Inject, Post, Res, UseGuards, UseInterceptors } from '@nestjs/common';
-import { AuthorizationService } from './authentication.service';
-import { ApiBearerAuth, ApiConsumes, ApiCreatedResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { AuthenticationService } from './authentication.service';
+import { ApiBearerAuth, ApiConsumes, ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { SEND_DTO_RES, SendDtoReq, SendDtoRes } from './dto/send.dto';
 import { ConfirmDtoReq, ConfirmDtoRes } from './dto/confirm.dto';
@@ -9,17 +9,23 @@ import { CONFIG_AUTH } from 'src/config/config.export';
 import { RefreshDtoRes } from './dto/refresh.dto';
 import { AuthPayload } from '../services/jwt/interface/jwt.interface';
 import { User } from '../services/jwt/jwt.decorator';
-import { CONFIRM_CODE_SUM, REFRESH_SUM, SEND_CODE_SUM } from './swagger/swagger.summary';
 import { ApiErrorResponses } from 'src/swagger/errors-exception.dto';
 import { Response } from 'express';
 import { RefreshGuard } from 'src/guards/refresh.guard';
+import { 
+  CONFIRM_CODE_SUM, 
+  REFRESH_SUM, 
+  SEND_CODE_SUM, 
+  VALIDATE_TOKEN_SUM 
+} from './swagger/swagger.summary';
+
 
 @Controller('auth')
 @ApiTags('Auth')
-export class AuthorizationController {
+export class AuthenticationController {
   
   @Inject()
-  private authorizationService: AuthorizationService
+  private authorizationService: AuthenticationService
 
   @Post('send-code')
   @ApiConsumes('multipart/form-data')
@@ -51,5 +57,13 @@ export class AuthorizationController {
     @User() jwt: AuthPayload
   ): Promise<RefreshDtoRes> {
     return this.authorizationService.refresh(res, jwt);
+  }
+
+  @Get('validate-token')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: VALIDATE_TOKEN_SUM })
+  @UseGuards(new BaseGuard(CONFIG_AUTH.JWT_ACCESS))
+  public validateToken() {
+    return true;
   }
 }
