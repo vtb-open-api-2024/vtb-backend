@@ -22,7 +22,7 @@ jobs:
             pwd
             cd ${HOME_DIR}
             pwd
-            python3 cicd.py
+            python3 cicd-backend.py
           EOF
           rm -f private_key
           echo "Success Deployed!"
