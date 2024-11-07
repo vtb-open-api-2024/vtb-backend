@@ -1,15 +1,13 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { AuthPayload } from '../auth/services/jwt/interface/jwt.interface';
-import { CreatePaymentCryptoDtoReq } from '../portfolio/dto/create.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/schema/users/user.entity';
 import { DataSource, Repository } from 'typeorm';
-import { dinero, greaterThanOrEqual, subtract, toDecimal, add, convert } from 'dinero.js';
 import { Card } from 'src/schema/cards/cards.entity';
 import { CryptoWallet } from 'src/schema/crypto_wallets/crypto_wallets.entity';
 import { Payment } from 'src/schema/payments/payments.entity';
 import { Transaction } from './interface/transaction.interface';
-import { parseMoney, parseMoneyDinero } from '../utilities/utilities.money';
+import { parseMoney } from '../utilities/utilities.money';
 
 
 @Injectable()

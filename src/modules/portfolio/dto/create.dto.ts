@@ -1,27 +1,25 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsNumber } from 'class-validator';
+import { IsNumber, IsString } from 'class-validator';
+import { PortfolioItem } from './portfolio.dto';
+import { WalletItem } from 'src/modules/wallet/dto/wallet.dto';
 
 
-export class CreatePaymentCryptoDtoReq {
+export class CreatePortfolioDtoReq {
 
-  @ApiProperty()
-  @Type(() => Number)
-  @IsNumber()
-  creditCardId: number
-
-  @ApiProperty()
-  @Type(() => Number)
-  @IsNumber()
-  cryptoWalletId: number;
-
-  @ApiProperty()
-  @Type(() => Number)
-  @IsNumber()
-  amount: number;
+  @ApiProperty({ description: 'Portfolio title' })
+  @IsString()
+  public title: string;
 }
 
 
-export class CreatePrtfolioRes {
-
+export class CreatePortfolioRes implements PortfolioItem {
+  @ApiProperty()
+  title: string;
+  
+  @ApiProperty()
+  portfolioId: number;
+  
+  @ApiProperty({ type: [WalletItem] })
+  wallets: WalletItem[];
 }

@@ -11,8 +11,15 @@ export class CreateAttachCardRequestDtoReq {
 
 
 export class CreateAttachCardRequestDtoRes {
+  @ApiProperty()
   id: number;
+
+  @ApiProperty()
   userId: number;
+  
+  @ApiProperty()
   cardNum: string;
+  
+  @ApiProperty()
   balance: string;
 }
