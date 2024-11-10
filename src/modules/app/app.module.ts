@@ -8,10 +8,12 @@ import { CardModule } from '../card/card.module';
 import { PaymentModule } from '../payment/payment.module';
 import { AdminModule } from '../admin/admin.module';
 import { TransactionModule } from '../transaction/transaction.module';
+import { OpenapiModule } from '../openapi/openapi.module';
 
 @Module({
   imports: [
     SchemaModule,
+    OpenapiModule,
     AuthModule,
     PortfolioModule,
     WalletModule,

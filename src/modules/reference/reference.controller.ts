@@ -1,12 +1,8 @@
-import { Body, Controller, Delete, Get, Inject, Post, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Inject, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { BaseGuard } from 'src/guards/base.guard';
 import { CONFIG_AUTH } from 'src/config/config.export';
 import { ReferenceService } from './reference.service';
-import { InjectRepository } from '@nestjs/typeorm';
-import { BlockchainDict } from 'src/schema/blockchain_dict/blockchain_dict.entity';
-import { Repository } from 'typeorm';
-import { TokenDict } from 'src/schema/token_dict/token_dict.entity';
 import { BlockchainRefDtoRes } from './dto/blockchains.dto';
 import { TokenRefDtoRes } from './dto/tokens.dto';
 
