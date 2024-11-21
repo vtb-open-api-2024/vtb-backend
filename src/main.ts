@@ -5,9 +5,10 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { DESCRIPTION } from './modules/app/const/app.description';
 import * as cookieParser from 'cookie-parser';
-
+import { initializeTransactionalContext } from 'typeorm-transactional';
 
 async function bootstrap() {
+  initializeTransactionalContext();
   const app = await NestFactory.create(AppModule);
   app.use(cookieParser());
   app.useGlobalPipes(

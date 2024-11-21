@@ -11,9 +11,8 @@ import { Payment } from 'src/schema/payments/payments.entity';
 import { CONFIG_OPEN_EXCHANGE_RATES } from 'src/config/config.export';
 import { get } from 'axios';
 import { ExchangeRatesResponse } from './interface/exchange_rates.interface';
-import { Transactional } from '../utilities/transactional.decorator';
 import { CreatePaymentCryptoDtoReq } from './dto/create_payment.dto';
-
+import { IsolationLevel, Transactional } from 'typeorm-transactional';
 
 @Injectable()
 export class PaymentService {
@@ -30,10 +29,7 @@ export class PaymentService {
   @InjectRepository(Payment)
   private readonly paymentRep: Repository<Payment>;
 
-  @Inject()
-  private readonly dataSource: DataSource;
-
-  @Transactional('REPEATABLE READ')
+  @Transactional({ isolationLevel: IsolationLevel.REPEATABLE_READ})
   public async createPaymentCrypto(
     user: AuthPayload,
     dto: CreatePaymentCryptoDtoReq

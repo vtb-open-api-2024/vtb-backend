@@ -7,6 +7,7 @@ import { AuthPayload, JwtPair } from './interface/jwt.interface';
 import { CONFIG_AUTH } from 'src/config/config.export';
 import { randomUUID } from 'crypto';
 import { hash } from 'bcrypt';
+import { Propagation, Transactional } from 'typeorm-transactional';
 
 
 @Injectable()
@@ -15,18 +16,21 @@ export class JwtService {
   @InjectRepository(JwtToken)
   private jwtRepository: Repository<JwtToken>;
 
+  @Transactional({ propagation: Propagation.MANDATORY })
   public async findTokenByRefreshToken(refresh_token: string): Promise<JwtToken> {
     return await this.jwtRepository.findOne({
       where: { refreshToken: refresh_token },
     });
   }
 
+  @Transactional({ propagation: Propagation.MANDATORY })
   public async deleteToken(userId: number, sessionId: string): Promise<void> {
     await this.jwtRepository.delete({
       sessionId: sessionId,
     });
   }
 
+  @Transactional({ propagation: Propagation.MANDATORY })
   public async createJwtTokens(userId: number): Promise<JwtPair> {
     const sessionId = randomUUID();
     const { accessToken, refreshToken } = this.generateAuthTokens({
@@ -42,6 +46,7 @@ export class JwtService {
     return { accessToken, refreshToken };
   }
 
+  @Transactional({ propagation: Propagation.MANDATORY })
   public async updateJwtTokens(userId: number, sessionId: string): Promise<JwtPair> {
     const token = await this.jwtRepository.findOne({
       relations: { user: true },

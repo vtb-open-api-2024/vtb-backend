@@ -8,6 +8,8 @@ import { CryptoWalletDBModule } from './crypto_wallets/crypto_wallets.module';
 import { CardsDBModule } from './cards/cards.module';
 import { FakeCardsRegisterDBModule } from './fake_cards_register/fake_cards_register.module';
 import { PaymentDBModule } from './payments/payments.module';
+import { addTransactionalDataSource } from 'typeorm-transactional';
+import { DataSource } from 'typeorm';
 
 @Module({
   imports: [
@@ -18,7 +20,15 @@ import { PaymentDBModule } from './payments/payments.module';
     CryptoWalletDBModule,
     JwtTokensDBModule,
     UsersDBModule,
-    TypeOrmModule.forRoot(dataSourceUserOption),
+    TypeOrmModule.forRootAsync({
+      useFactory: async () => dataSourceUserOption,
+      dataSourceFactory: async (options) => {
+        if (!options) {
+          throw new Error('Invalid options passed');
+        }
+        return addTransactionalDataSource(new DataSource(options));
+      },
+    }),
   ],
   exports: [TypeOrmModule],
 })

@@ -11,8 +11,8 @@ import { encrypt } from 'src/modules/utilities/utilities.cipher';
 import { JwtService } from '../services/jwt/jwt.service';
 import { UcallerService } from '../services/ucaller/ucaller.service';
 import { AuthPayload } from '../services/jwt/interface/jwt.interface';
-import { Transactional } from 'src/modules/utilities/transactional.decorator';
 import { Response } from 'express';
+import { Transactional } from 'typeorm-transactional';
 
 
 @Injectable()
@@ -29,9 +29,6 @@ export class AuthenticationService {
 
   @Inject()
   private readonly ucallerService: UcallerService
-
-  @Inject()
-  private readonly dataSource: DataSource;
 
   @Transactional()
   public async sendCode(dto: SendDtoReq): Promise<SendDtoRes> {
@@ -86,6 +83,7 @@ export class AuthenticationService {
     return { accessToken };
   }
 
+  @Transactional()
   public async refresh(res: Response, jwt: AuthPayload): Promise<RefreshDtoRes> {
     const { accessToken, refreshToken } = await this.jwtService
       .updateJwtTokens(jwt.userId, jwt.sessionId);
